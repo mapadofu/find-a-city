@@ -1,6 +1,14 @@
-dataset
+six
 ipython
+dataset
 matplotlib
 pandas
 requests
 scipy
+#GEOS https://trac.osgeo.org/geos/
+#proj
+shapely
+#SQLAlchemy
+pyshp
+Cython
+cartopy

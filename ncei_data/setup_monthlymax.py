@@ -9,7 +9,7 @@ tmax_file_url = "https://www1.ncdc.noaa.gov/pub/data/normals/1981-2010/products/
 
 def _extract_temp(item):
     i = int(item[:-1])/10.0
-
+    return i
 
 month = dict([(i+1, v) for (i,v) in enumerate("JAN,FEB,MAR,APR,MAY,JUN,JUL,AUG,SEP,OCT,NOV,DEC".split(','))])
 
