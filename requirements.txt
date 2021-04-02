@@ -12,3 +12,11 @@ shapely
 pyshp
 Cython
 cartopy
+#ipyleaflet
+dash
+plotly
+fiona
+pyproj
+rtree
+shapely
+geopandas
