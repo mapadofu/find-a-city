@@ -5,13 +5,13 @@ matplotlib
 pandas
 requests
 scipy
+#cartopy
 #GEOS https://trac.osgeo.org/geos/
 #proj
 shapely
 #SQLAlchemy
 pyshp
 Cython
-cartopy
 #ipyleaflet
 dash
 plotly

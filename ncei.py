@@ -21,14 +21,22 @@ def grab_records():
     ''' Pull the summer temperature data, 
         @retval: List[SummerTemperature] 
     '''
-    stations_tbl = 'stations'
-    tmax_tbl = 'tmax'  #
-    conn = sqlite3.connect('/home/dlm/.local/ncei.db') 
+    conn = sqlite3.connect(db_file) 
     cur = conn.cursor()
     excluded = """('FL', 'GA', 'SC', 'AL', 'MS', 'TX', 'OK', 'AZ', 'CA', 'ND', 'SD', 'NE', 'MO', 'IA', 'KS', 'LA', 'AK', 'AR' )"""
-    res = list(cur.execute(f"""SELECT latitude, longitude, elevation, state, name, tmax.AUG, tmax.id FROM {stations_tbl} JOIN {tmax_tbl} ON tmax.id=stations.id WHERE state NOT IN {excluded} AND latitude >30 AND latitude < 51 AND longitude > -140 AND longitude < -60""").fetchall())      
+    res = list(cur.execute(f"""SELECT latitude, longitude, elevation, state, name, {tmax_tbl}.AUG, {tmax_tbl}.id FROM {stations_tbl} JOIN {tmax_tbl} ON {tmax_tbl}.id=stations.id WHERE state NOT IN {excluded} AND latitude >30 AND latitude < 51 AND longitude > -140 AND longitude < -60""").fetchall())      
     return [SummerTemperature(*item) for item in res]
 #_columns = 'latitude longitude elevation state name aug_temperature station'.split()
+
+
+# Table names
+stations_tbl = 'stations'
+tmax_tbl = 'tmax'  
+db_file = os.path.expanduser('~/.local/ncei.db')
+
+def ez_connection():
+    ''' Return a dataset (easy-to-use) connection to the NCEI data database '''
+    return dataset.connect('sqlite:///'+db_file)
 
 @dataclasses.dataclass
 class SummerTemperature:

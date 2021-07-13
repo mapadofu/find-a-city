@@ -1,6 +1,6 @@
 import sys
 import requests
-from ncei import Connection, stations_tbl
+from ncei import ez_connection, stations_tbl
 
 
 
@@ -18,11 +18,15 @@ def parse_line(line):
         'state':line[38:40],
         'name':line[41:71].strip(),
         # there are some other fields that I don't understand/care about
+	#'gsn':line[72:75].strip(), # TBR: what is this?
+	#'hcn':line[76:79].strip(), # TBR: what is this?
+	#'wmoid':line[80:85].strip(), # TBR: what is this?	
+	#'method':line[86:99].strip(),
     }
     return record
 
 def populate_db(records):
-    with Connection() as db:
+    with ez_connection() as db:
         _populate_db(db, stations_tbl, records)
 
 
@@ -58,12 +62,12 @@ def install_data():
 
 def check_data():
     ''' Returns True if it looks like the stations data have been installed '''
-    tbl = Connection()[stations_tbl]
+    tbl = ez_connection()[stations_tbl]
     return len(tbl) == 9887
 
 if __name__ == "__main__":
     install_data()
     if not check_data():
-        print("Got {0} records, expected {1}".format(len(Connection()[stations_tbl]), 9887))
+        print("Got {0} records, expected {1}".format(len(ez_connection()[stations_tbl]), 9887))
         exit(1)
 
