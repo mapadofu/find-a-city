@@ -1,6 +1,7 @@
 import sys
 import requests
-from ncei import ez_connection, stations_tbl
+import db
+from ncei import stations_tbl
 
 
 
@@ -26,8 +27,8 @@ def parse_line(line):
     return record
 
 def populate_db(records):
-    with ez_connection() as db:
-        _populate_db(db, stations_tbl, records)
+    with db.ez_connection() as c:
+        _populate_db(c, stations_tbl, records)
 
 
 def _populate_db(db, table, records):
@@ -62,7 +63,7 @@ def install_data():
 
 def check_data():
     ''' Returns True if it looks like the stations data have been installed '''
-    tbl = ez_connection()[stations_tbl]
+    tbl = db.ez_connection()[stations_tbl]
     return len(tbl) == 9887
 
 if __name__ == "__main__":

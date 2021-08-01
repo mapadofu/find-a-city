@@ -1,12 +1,12 @@
-import dataset
 import sys, os
 import argparse
 import pandas
 
-import sqlite3
 import dataclasses
 import geopandas
 import shapely.geometry as sg
+
+import db
 
 # epsg:2163 is reasonable for the continental us
 
@@ -21,7 +21,7 @@ def grab_records(month='AUG'):
     ''' Pull the summer temperature data, 
         @retval: List[SummerTemperature] 
     '''
-    conn = sqlite3.connect(db_file) 
+    conn = db.sql_connection()
     cur = conn.cursor()
     #excluded = """('FL', 'GA', 'SC', 'AL', 'MS', 'TX', 'OK', 'AZ', 'CA', 'ND', 'SD', 'NE', 'MO', 'IA', 'KS', 'LA', 'AK', 'AR' )"""
     excluded = """('AK', 'HI')"""
@@ -33,11 +33,6 @@ def grab_records(month='AUG'):
 # Table names
 stations_tbl = 'stations'
 tmax_tbl = 'tmax'  
-db_file = os.path.expanduser('~/.local/ncei.db')
-
-def ez_connection():
-    ''' Return a dataset (easy-to-use) connection to the NCEI data database '''
-    return dataset.connect('sqlite:///'+db_file)
 
 @dataclasses.dataclass
 class SummerTemperature:

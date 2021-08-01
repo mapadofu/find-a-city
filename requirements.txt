@@ -20,3 +20,4 @@ pyproj
 rtree
 shapely
 geopandas
+xdg

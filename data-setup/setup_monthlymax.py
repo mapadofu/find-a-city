@@ -1,6 +1,8 @@
 import sys
 import requests
-from ncei import ez_connection,  tmax_tbl 
+
+import db
+from ncei import tmax_tbl 
 from setup_stations import _populate_db
 
 
@@ -32,8 +34,8 @@ def parse_line(line):
     return record
 
 def populate_db(records):
-    with ez_connection() as db:
-        _populate_db(db, tmax_tbl, records)
+    with db.ez_connection() as c:
+        _populate_db(c, tmax_tbl, records)
 
 def download_stations():
     ''' @retval generates the individual data rows, as text '''
@@ -48,12 +50,12 @@ def install_data():
 
 def check_data():
     ''' Returns True if it looks like the stations data have been installed '''
-    tbl = ez_connection()[tmax_tbl]
+    tbl = db.ez_connection()[tmax_tbl]
     return len(tbl) == 7501
 
 if __name__ == "__main__":
     install_data()
     if not check_data():
-        print("Got {0} records, expected {1}".format(len(ez_connection()[tmax_tbl]), 7501))
+        print("Got {0} records, expected {1}".format(len(db.ez_connection()[tmax_tbl]), 7501))
         exit(1)
 
